@@ -36,8 +36,6 @@ class ProductFormRequest extends FormRequest
             'original_price' => 'required|integer',
             'selling_price' => 'required|integer',
             'quantity' => 'required|integer',
-            'trending' => 'required',
-            'status' => 'required',
             'images.*' => 'nullable'
         ];
     }

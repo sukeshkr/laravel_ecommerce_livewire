@@ -10,6 +10,15 @@
         <div class="modal-body">
           <form wire:submit.prevent = "storeBrand()">
             <div class="form-group">
+                <label>Select Category</label>
+                <select wire:model.defer="category_id" class="form-control @error('category_id') is-invalid @enderror">
+                    <option value="">...Select Category...</option>
+                    @foreach ($categories as $category)
+                    <option value="{{$category->id}}">{{$category->name}}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="form-group">
               <label>Brand Name</label>
               <input type="text" wire:model.defer="brand_name" class="form-control @error('brand_name') is-invalid @enderror">
             </div>
@@ -53,6 +62,15 @@
             </div>
             <div wire:loading.remove>
               <form wire:submit.prevent = "updateBrand()">
+                <div class="form-group">
+                    <label>Select Category</label>
+                    <select wire:model.defer="category_id" class="form-control @error('category_id') is-invalid @enderror">
+                        <option value="">...Select Category...</option>
+                        @foreach ($categories as $category)
+                        <option value="{{$category->id}}">{{$category->name}}</option>
+                        @endforeach
+                    </select>
+                </div>
                 <div class="form-group">
                   <label>Brand Name</label>
                   <input type="text" wire:model.defer="brand_name" class="form-control @error('brand_name') is-invalid @enderror">

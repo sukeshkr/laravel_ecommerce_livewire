@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Admin\Brand;
 
 use App\Models\Brand;
+use App\Models\Category;
 use Livewire\Component;
 use Illuminate\Support\Str;
 use Livewire\WithPagination;
@@ -12,11 +13,12 @@ class Index extends Component
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
 
-    public $brand_name, $brand_slug, $status, $brand_id;
+    public $brand_name, $brand_slug, $status, $brand_id, $category_id;
 
     public function rules()
     {
         return [
+            'category_id'=>'required|integer',
             'brand_name'=>'required|string',
             'brand_slug'=>'required|string',
             'status'=>'nullable',
@@ -28,6 +30,7 @@ class Index extends Component
         $this->brand_slug = NULL;
         $this->status = NULL;
         $this->brand_id = NULL;
+        $this->category_id = NULL;
     }
     public function storeBrand()
     {
@@ -35,6 +38,7 @@ class Index extends Component
 
         Brand::create([
             'name' => $this->brand_name,
+            'category_id' => $this->category_id,
             'slug' => Str::slug($this->brand_slug),
             'status' => $this->status ==true ? 1 : 0,
         ]);
@@ -56,6 +60,7 @@ class Index extends Component
         $brand = Brand::findOrFail($brand_id);
 
         $this->brand_name = $brand->name;
+        $this->category_id = $brand->category_id;
         $this->brand_slug = $brand->slug;
         $this->status = $brand->status;
 
@@ -66,6 +71,7 @@ class Index extends Component
         $validatedData = $this->validate();
         Brand::findOrFail($this->brand_id)->update([
             'name' => $this->brand_name,
+            'category_id' => $this->category_id,
             'slug' => Str::slug($this->brand_slug),
             'status' => $this->status ==true ? 1 : 0,
         ]);
@@ -86,9 +92,12 @@ class Index extends Component
     }
     public function render()
     {
+        $categories = Category::where('status',0)->get();
+
         return view('livewire.admin.brand.index',[
             'brands'=>Brand::paginate(10),
-            ])->extends('layouts.admin')
+            'categories'=> $categories])
+            ->extends('layouts.admin')
             ->section('content');
     }
 }

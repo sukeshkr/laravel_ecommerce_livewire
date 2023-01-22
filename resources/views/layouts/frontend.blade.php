@@ -13,6 +13,19 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{asset('front/style.css')}}">
+     <!-- owl caresol -->
+    <link rel="stylesheet" href="{{asset('front/owl.carousel.min.css')}}">
+    <link rel="stylesheet" href="{{asset('front/owl.theme.default.min.css')}}">
+    <!-- exzoom jquery plugin  -->
+    <link href="{{asset('front/exzoom/jquery.exzoom.css')}}" rel="stylesheet">
+
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"/>
+    <!-- Default theme -->
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css"/>
+    <!-- Semantic UI theme -->
+    @livewireStyles
 </head>
 <body>
 
@@ -37,13 +50,19 @@
                         <ul class="nav justify-content-end">
 
                             <li class="nav-item">
-                                <a class="nav-link" href="#">
-                                    <i class="fa fa-shopping-cart"></i> Cart (0)
+                                <a class="nav-link" href="{{route('order')}}">
+                                    <i class="fa fa-shopping-cart"></i> My Order
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{route('cart.list')}}">
+                                    <i class="fa fa-shopping-cart"></i> Cart (<livewire:frontend.cart.cart-count/>)
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">
-                                    <i class="fa fa-heart"></i> Wishlist (0)
+                                <a class="nav-link" href="{{route('wish.list')}}">
+                                    <i class="fa fa-heart"></i> Wishlist (<livewire:frontend.wish-list-count/>)
                                 </a>
                             </li>
                             @guest
@@ -147,8 +166,40 @@
 
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+
+<script src="{{asset('front/owl.carousel.min.js')}}"></script>
+
+<!-- jquery plugin exzoom js file  -->
+<script src="{{asset('front/exzoom/jquery.exzoom.js')}}"></script>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+
+
+
+
+<script>
+    window.addEventListener('message', event => {
+
+        if(event.detail) {
+
+            alertify.set('notifier','position', 'top-right');
+            alertify.notify(event.detail.text,event.detail.type,2);
+
+        }
+
+
+    });
+</script>
+
+@yield('scripts')
+@livewireScripts
+@stack('scripts')
 </body>
 </html>

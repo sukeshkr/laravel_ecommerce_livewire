@@ -47,8 +47,9 @@ class ProductController extends Controller
             'original_price' => $validatedData['original_price'],
             'selling_price' => $validatedData['selling_price'],
             'quantity' => $validatedData['quantity'],
-            'trending' => $validatedData['trending'],
-            'status' => $validatedData['status'],
+            'trending' => $request->trending == true ? 1 : 0,
+            'featured' => $request->featured == true ? 1 : 0,
+            'status' => $request->status == true ? 1 : 0,
         ]);
 
         if($request->hasFile('images')) {
@@ -113,8 +114,9 @@ class ProductController extends Controller
                 'original_price' => $validatedData['original_price'],
                 'selling_price' => $validatedData['selling_price'],
                 'quantity' => $validatedData['quantity'],
-                'trending' => $validatedData['trending'],
-                'status' => $validatedData['status'],
+                'trending' => $request->trending == true ? 1 : 0,
+                'featured' => $request->featured == true ? 1 : 0,
+                'status' => $request->status == true ? 1 : 0,
             ]);
 
             if($request->hasFile('images')) {

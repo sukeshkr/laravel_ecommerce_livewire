@@ -3,9 +3,14 @@
 use App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\admin\ColorController;
 use App\Http\Controllers\admin\DashboardController;
+use App\Http\Controllers\admin\AdminOrderController;
 use App\Http\Controllers\admin\ProductController;
 use App\Http\Controllers\admin\SliderController;
+use App\Http\Controllers\frontend\CartListController;
+use App\Http\Controllers\frontend\CheckoutController;
 use App\Http\Controllers\frontend\FrontEndController;
+use App\Http\Controllers\frontend\OrderController;
+use App\Http\Controllers\frontend\WishListController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Livewire\Admin\Brand\Index;
 use Illuminate\Support\Facades\Route;
@@ -27,12 +32,21 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/',[FrontEndController::class,'index'])->name('welcome');
 Route::get('/collections',[FrontEndController::class,'categories'])->name('collections');
-Route::get('/collections/{category}',[FrontEndController::class,'categoryProduct'])->name('collection.category');
-Route::get('/collections/{category_slug?}/{product_slug?}',[FrontEndController::class,'slugProduct'])->name('collection.slug');
+Route::get('/collections/{category_slug}',[FrontEndController::class,'categoryProduct'])->name('collection.category');
+Route::get('/collections/{category_slug?}/{product_slug?}',[FrontEndController::class,'viewProduct'])->name('product.view');
+Route::get('/thank-you',[FrontEndController::class,'thankYou'])->name('thank.you');
+
+
+Route::middleware(['auth'])->group(function() {
+
+    Route::get('/wish-list',[WishListController::class,'index'])->name('wish.list');
+    Route::get('/cart-list',[CartListController::class,'index'])->name('cart.list');
+    Route::get('/checkout',[CheckoutController::class,'index'])->name('checkout');
+    Route::get('/order',[OrderController::class,'index'])->name('order');
+    Route::get('/order-view/{order_id}',[OrderController::class,'orderView'])->name('order.view');
+});
 
 Route::get('/new-arrivals',[FrontEndController::class,'newArrivals'])->name('new.arrivals');
-
-
 
 
 Route::get('/home', function () {
@@ -97,6 +111,15 @@ Route::prefix('admin')->middleware(['auth','isAdmin'])->group(function() {
         Route::get('/slider/edit/{slider}', 'sliderEdit')->name('slider.edit');
         Route::put('/slider/{slider}', 'sliderUpdate')->name('slider.update');
         Route::get('/slider/delete/{slider}', 'sliderDelete')->name('slider.delete');
+
+    });
+    Route::controller(AdminOrderController::class)->group(function () {
+
+        Route::get('/orders','index')->name('admin.orders');
+        Route::get('/order/view/{order_id}','orderView')->name('admin.order.view');
+        Route::put('/order/view/{order_id}','updateOrderStatus')->name('admin.order.update');
+        Route::get('/invoice/view/{order_id}','viewInvoice')->name('admin.invoice.view');
+        Route::get('/invoice/download/{order_id}', 'downloadInvoice')->name('admin.invoice.download');
 
     });
 
