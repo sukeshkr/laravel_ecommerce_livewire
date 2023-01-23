@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use App\Mail\InvoiceMailSend;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Mail;
 
 class AdminOrderController extends Controller
 {
@@ -79,5 +81,20 @@ class AdminOrderController extends Controller
         $pdf = Pdf::loadView('admin.invoice.view', $data);
         return $pdf->download('invoice_'.$order->id.'.'.'pdf');
 
+    }
+
+    public function mailInvoice(int $orderId)
+    {
+        $order = Order::findOrFail($orderId);
+
+        try {
+
+            Mail::to($order->email)->send(new InvoiceMailSend($order));
+            return redirect()->back()->with('message','mail has sent with attached Invoice to '.$order->email);
+        }
+        catch(\Exception $e) {
+
+            return redirect()->back()->with('message','Something Went wrong');
+        }
     }
 }

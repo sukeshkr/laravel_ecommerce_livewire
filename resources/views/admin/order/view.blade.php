@@ -23,6 +23,7 @@
                         <a href="{{route('admin.orders')}}" class="btn btn-danger btn-sm">Back</a>
                         <a href="{{route('admin.invoice.download',$order->id)}}" class="btn btn-primary btn-sm">Download Invoice</a>
                         <a href="{{route('admin.invoice.view',$order->id)}}" target="_blank" class="btn btn-success btn-sm">View Invoice</a>
+                        <a href="{{route('admin.invoice.mail',$order->id)}}" class="btn btn-info btn-sm">Send Invoice via mail</a>
                     </h4>
                     <hr>
                     <div class="row">

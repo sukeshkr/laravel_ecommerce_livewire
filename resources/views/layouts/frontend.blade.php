@@ -34,12 +34,12 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-2 my-auto d-none d-sm-none d-md-block d-lg-block">
-                        <h5 class="brand-name">Funda Ecom</h5>
+                        <h5 class="brand-name">{{$appSetting->website_name ?? 'Website Name'}}</h5>
                     </div>
                     <div class="col-md-5 my-auto">
-                        <form role="search">
+                        <form role="search" action="{{route('search')}}" method="GET">
                             <div class="input-group">
-                                <input type="search" placeholder="Search your product" class="form-control" />
+                                <input type="search" name="search" value="{{Request::get('search')}}" placeholder="Search your product" class="form-control" />
                                 <button class="btn bg-white" type="submit">
                                     <i class="fa fa-search"></i>
                                 </button>
@@ -49,11 +49,14 @@
                     <div class="col-md-5 my-auto">
                         <ul class="nav justify-content-end">
 
+                            @if (Auth::check())
+
                             <li class="nav-item">
                                 <a class="nav-link" href="{{route('order')}}">
                                     <i class="fa fa-shopping-cart"></i> My Order
                                 </a>
                             </li>
+                            @endif
 
                             <li class="nav-item">
                                 <a class="nav-link" href="{{route('cart.list')}}">
@@ -93,7 +96,7 @@
                                     <i class="fa fa-user"></i> {{ Auth::user()->name }}
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="#"><i class="fa fa-user"></i> Profile</a></li>
+                                <li><a class="dropdown-item" href="{{route('user.profile')}}"><i class="fa fa-user"></i> Profile</a></li>
                                 <li><a class="dropdown-item" href="#"><i class="fa fa-list"></i> My Orders</a></li>
                                 <li><a class="dropdown-item" href="#"><i class="fa fa-heart"></i> My Wishlist</a></li>
                                 <li><a class="dropdown-item" href="#"><i class="fa fa-shopping-cart"></i> My Cart</a></li>
@@ -134,7 +137,7 @@
                             <a class="nav-link" href="{{route('new.arrivals')}}">New Arrivals</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Featured Products</a>
+                            <a class="nav-link" href="{{route('featured.products')}}">Featured Products</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">Electronics</a>
@@ -161,6 +164,80 @@
     <main class="py-2">
         @yield('content')
     </main>
+
+    <!-- Footer  ------------------------ -->
+
+    <div>
+        <div class="footer-area">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-3">
+                        <h4 class="footer-heading">{{$appSetting->website_name ?? 'website name'}}</h4>
+                        <div class="footer-underline"></div>
+                        <p>
+                            {{$appSetting->meta_description ?? 'website name'}}
+                        </p>
+                    </div>
+                    <div class="col-md-3">
+                        <h4 class="footer-heading">Quick Links</h4>
+                        <div class="footer-underline"></div>
+                        <div class="mb-2"><a href="{{route('welcome')}}" class="text-white">Home</a></div>
+                        <div class="mb-2"><a href="{{route('collections')}}" class="text-white">About Us</a></div>
+                        <div class="mb-2"><a href="{{route('collections')}}" class="text-white">Contact Us</a></div>
+                        <div class="mb-2"><a href="{{route('collections')}}" class="text-white">Blogs</a></div>
+                        <div class="mb-2"><a href="{{route('collections')}}" class="text-white">Sitemaps</a></div>
+                    </div>
+                    <div class="col-md-3">
+                        <h4 class="footer-heading">Shop Now</h4>
+                        <div class="footer-underline"></div>
+                        <div class="mb-2"><a href="{{route('collections')}}" class="text-white">Collections</a></div>
+                        <div class="mb-2"><a href="{{route('welcome')}}" class="text-white">Trending Products</a></div>
+                        <div class="mb-2"><a href="{{route('new.arrivals')}}" class="text-white">New Arrivals Products</a></div>
+                        <div class="mb-2"><a href="{{route('featured.products')}}" class="text-white">Featured Products</a></div>
+                        <div class="mb-2"><a href="{{route('collections')}}" class="text-white">Cart</a></div>
+                    </div>
+                    <div class="col-md-3">
+                        <h4 class="footer-heading">Reach Us</h4>
+                        <div class="footer-underline"></div>
+                        <div class="mb-2">
+                            <p>
+                                <i class="fa fa-map-marker"></i> {{$appSetting->address ?? 'address'}}
+                            </p>
+                        </div>
+                        <div class="mb-2">
+                            <a href="" class="text-white">
+                                <i class="fa fa-phone"></i> {{$appSetting->phone1 ?? 'phone1'}}
+                            </a>
+                        </div>
+                        <div class="mb-2">
+                            <a href="" class="text-white">
+                                <i class="fa fa-envelope"></i> {{$appSetting->email1 ?? 'email1'}}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="copyright-area">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-8">
+                        <p class=""> &copy; 2023 - Sukesh IT - Ecommerce. All rights reserved.</p>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="social-media">
+                            Get Connected:
+                            <a href="{{$appSetting->facebook ?? ''}}" target="_blank"><i class="fa fa-facebook"></i></a>
+                            <a href="{{$appSetting->twitter ?? ''}}" target="_blank"><i class="fa fa-twitter"></i></a>
+                            <a href="{{$appSetting->instagram ?? ''}}" target="_blank"><i class="fa fa-instagram"></i></a>
+                            <a href="{{$appSetting->youtube ?? ''}}" target="_blank"><i class="fa fa-youtube"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ------------------------------------------------------------------->
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 

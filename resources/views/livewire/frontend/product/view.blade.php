@@ -10,9 +10,7 @@
                 @endif
             </div>
 
-
             <div class="row">
-
                 <div class="col-md-5 mt-3">
                     <div class="bg-white border" wire:ignore>
                         @if ($product->productImages)
@@ -46,9 +44,8 @@
                             {{$product->name}}
                         </h4>
                         <hr>
-                        <p class="product-path">
-                            Home / {{$product->category->name}} / {{$product->name}}
-                        </p>
+                        <p class="product-path"> Home / {{$product->category->name}} / {{$product->name}}</p>
+                        <p class="product-path">Brand: {{$product->brandName->name}}</p>
                         <div>
                             <span class="selling-price">${{$product->selling_price}}</span>
                             <span class="original-price">${{$product->original_price}}</span>
@@ -134,32 +131,157 @@
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
+
+
+
+    <div class="py-3 py-md-5 bg-white">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 mb-3">
+                    <h3>Related @if ($category) {{$category->name}}
+                    @endif Products</h3>
+                    <div class="underline"></div>
+                </div>
+                <div class="col-md-12">
+                    @if ($category)
+                    <div class="owl-carousel owl-theme four-carousel">
+                        @foreach ($category->products->take(15) as $product)
+                        <div class="item mb-3">
+                        <div class="product-card">
+                            <div class="product-card-img">
+                                @if ($product->productImages->count() > 0 )
+                                <a href="{{route('product.view',['category_slug'=>$product->category->slug,'product_slug'=>$product->slug])}}">
+                                    <img src="{{asset('uploads/products/'.$product->productImages[0]->image)}}" alt="{{$product->name}}">
+                                </a>
+                                @endif
+                            </div>
+                            <div class="product-card-body">
+                                <p class="product-brand">{{$product->brandName->name}}</p>
+                                <h5 class="product-name">
+                                <a href="{{route('product.view',['category_slug'=>$product->category->slug,'product_slug'=>$product->slug])}}">
+                                    {{$product->name}}
+                                </a>
+                                </h5>
+                                <div>
+                                    <span class="selling-price">₹{{$product->selling_price}}</span>
+                                    <span class="original-price">₹{{$product->original_price}}</span>
+                                </div>
+                                <div class="mt-2">
+                                    <a href="" class="btn btn1">Add To Cart</a>
+                                    <a href="" class="btn btn1"> <i class="fa fa-heart"></i> </a>
+                                    <a href="" class="btn btn1"> View </a>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                        @endforeach
+                    </div>
+                    @else
+                        <div class="p-2">
+                            <h4>No Data available</h4>
+                        </div>
+                    @endif
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="py-3 py-md-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 mb-3">
+                    <h3>Related @if ($product) {{$product->brandName->name}}
+
+                    @endif Products</h3>
+                    <div class="underline"></div>
+                </div>
+                @forelse ($category->products->take(15) as $brandProduct)
+                @if ($brandProduct->brand == $product->brandName->id)
+
+                <div class="col-md-3 mb-3">
+                    <div class="product-card">
+                        <div class="product-card-img">
+                            @if ($brandProduct->productImages->count() > 0 )
+                            <a href="{{route('product.view',['category_slug'=>$brandProduct->category->slug,'product_slug'=>$brandProduct->slug])}}">
+                                <img src="{{asset('uploads/products/'.$brandProduct->productImages[0]->image)}}" alt="{{$brandProduct->name}}">
+                            </a>
+                            @endif
+                        </div>
+                        <div class="product-card-body">
+                            <p class="product-brand">{{$brandProduct->brandName->name}}</p>
+                            <h5 class="product-name">
+                            <a href="{{route('product.view',['category_slug'=>$product->category->slug,'product_slug'=>$brandProduct->slug])}}">
+                                {{$brandProduct->name}}
+                            </a>
+                            </h5>
+                            <div>
+                                <span class="selling-price">₹{{$brandProduct->selling_price}}</span>
+                                <span class="original-price">₹{{$brandProduct->original_price}}</span>
+                            </div>
+                            <div class="mt-2">
+                                <a href="" class="btn btn1">Add To Cart</a>
+                                <a href="" class="btn btn1"> <i class="fa fa-heart"></i> </a>
+                                <a href="" class="btn btn1"> View </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                @endif
+
+                @empty
+                <div class="col-md-12 p-2">
+                    <h4>No Data available</h4>
+                </div>
+                @endforelse
+
+            </div>
+        </div>
+    </div>
+
+
+
 
 </div>
 
 @push('scripts')
 <script>
-    $(function(){
+$(function(){
 
-$("#exzoom").exzoom({
-
-  // thumbnail nav options
-  "navWidth": 60,
-  "navHeight": 60,
-  "navItemNum": 5,
-  "navItemMargin": 7,
-  "navBorder": 1,
-
-  // autoplay
-  "autoPlay": true,
-
-  // autoplay interval in milliseconds
-  "autoPlayTimeout": 2000
-
+    $("#exzoom").exzoom({
+    // thumbnail nav options
+    "navWidth": 60,
+    "navHeight": 60,
+    "navItemNum": 5,
+    "navItemMargin": 7,
+    "navBorder": 1,
+    // autoplay
+    "autoPlay": true,
+    // autoplay interval in milliseconds
+    "autoPlayTimeout": 2000
+    });
 });
 
-});
+//Owl carosel
+$('.four-carousel').owlCarousel({
+    loop:true,
+    margin:10,
+    nav:true,
+    responsive:{
+        0:{
+            items:1
+        },
+        600:{
+            items:3
+        },
+        1000:{
+            items:4
+        }
+    }
+})
 </script>
 @endpush

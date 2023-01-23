@@ -13,13 +13,31 @@ class FrontEndController extends Controller
     public function index()
     {
         $sliders = Slider::where('status',0)->get();
-        $trendingProduct = Product::where('trending',1)->latest()->take(15)->get();
-        return view('frontend.index',compact('sliders','trendingProduct'));
+        $trendingProduct = Product::where('trending',1)->latest()->take(12)->get();
+        $newArrivalProducts = Product::latest()->take(12)->get();
+        $featuredProducts = Product::where('featured',1)->latest()->take(12)->get();
+        return view('frontend.index',compact('sliders','trendingProduct','newArrivalProducts','featuredProducts'));
+    }
+    public function search(Request $request)
+    {
+        if($request->search) {
+
+           $searchProducts = Product::where('name','like','%'.$request->search.'%')->latest()->paginate(15);
+           return view('frontend.pages.search',compact('searchProducts'));
+        }
+        else {
+            return redirect()->back()->with('message','Sorry no data Found');
+        }
     }
     public function newArrivals()
     {
         $newArrivalProducts = Product::latest()->take(16)->get();
         return view('frontend.pages.new-arrival',compact('newArrivalProducts'));
+    }
+    public function featuredProducts()
+    {
+        $featuredProducts = Product::where('featured',1)->latest()->take(16)->get();
+        return view('frontend.pages.featured-products',compact('featuredProducts'));
     }
     public function categories()
     {

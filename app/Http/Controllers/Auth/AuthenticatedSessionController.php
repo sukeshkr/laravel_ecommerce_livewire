@@ -35,7 +35,7 @@ class AuthenticatedSessionController extends Controller
             return redirect('admin/dashboard')->with('status','Welcome to dashboard');
         }
         else {
-            return redirect('/home')->with('status','Loggedin sucessfully');
+            return redirect()->route('welcome')->with('status','Loggedin sucessfully');
         }
 
         //return redirect()->intended(RouteServiceProvider::HOME);

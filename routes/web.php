@@ -5,36 +5,29 @@ use App\Http\Controllers\admin\ColorController;
 use App\Http\Controllers\admin\DashboardController;
 use App\Http\Controllers\admin\AdminOrderController;
 use App\Http\Controllers\admin\ProductController;
+use App\Http\Controllers\admin\SiteSettingController;
 use App\Http\Controllers\admin\SliderController;
+use App\Http\Controllers\admin\UserController;
 use App\Http\Controllers\frontend\CartListController;
 use App\Http\Controllers\frontend\CheckoutController;
 use App\Http\Controllers\frontend\FrontEndController;
+use App\Http\Controllers\frontend\FrontendUserController;
 use App\Http\Controllers\frontend\OrderController;
 use App\Http\Controllers\frontend\WishListController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Livewire\Admin\Brand\Index;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
-// Route::get('/', function () {
-//     return view('welcome');
-// });
 
 Route::get('/',[FrontEndController::class,'index'])->name('welcome');
 Route::get('/collections',[FrontEndController::class,'categories'])->name('collections');
 Route::get('/collections/{category_slug}',[FrontEndController::class,'categoryProduct'])->name('collection.category');
 Route::get('/collections/{category_slug?}/{product_slug?}',[FrontEndController::class,'viewProduct'])->name('product.view');
 Route::get('/thank-you',[FrontEndController::class,'thankYou'])->name('thank.you');
+Route::get('/new-arrivals',[FrontEndController::class,'newArrivals'])->name('new.arrivals');
+Route::get('/featured-products',[FrontEndController::class,'featuredProducts'])->name('featured.products');
+
+Route::get('/search',[FrontEndController::class,'search'])->name('search');
 
 
 Route::middleware(['auth'])->group(function() {
@@ -44,10 +37,13 @@ Route::middleware(['auth'])->group(function() {
     Route::get('/checkout',[CheckoutController::class,'index'])->name('checkout');
     Route::get('/order',[OrderController::class,'index'])->name('order');
     Route::get('/order-view/{order_id}',[OrderController::class,'orderView'])->name('order.view');
+
+    Route::get('/user/profile',[FrontendUserController::class,'index'])->name('user.profile');
+    Route::post('/user/profile/update',[FrontendUserController::class,'profileUpdate'])->name('user.profile.update');
+    Route::get('/user/profile/change-password',[FrontendUserController::class,'changeUserPassword'])->name('user.change.password');
+    Route::post('/user/profile/change-password',[FrontendUserController::class,'updateUserPassword'])->name('user.update.password');
+
 });
-
-Route::get('/new-arrivals',[FrontEndController::class,'newArrivals'])->name('new.arrivals');
-
 
 Route::get('/home', function () {
     return view('dashboard');
@@ -67,6 +63,10 @@ Route::middleware('auth')->group(function () {
 Route::prefix('admin')->middleware(['auth','isAdmin'])->group(function() {
 
     Route::get('/dashboard',[DashboardController::class,'index'])->name('admin.dashboard');
+
+    Route::get('/site-settings',[SiteSettingController::class,'index'])->name('site.settings');
+    Route::post('/post-setting',[SiteSettingController::class,'postSetting'])->name('post.setting');
+
 
     Route::controller(CategoryController::class)->group(function () {
 
@@ -111,8 +111,8 @@ Route::prefix('admin')->middleware(['auth','isAdmin'])->group(function() {
         Route::get('/slider/edit/{slider}', 'sliderEdit')->name('slider.edit');
         Route::put('/slider/{slider}', 'sliderUpdate')->name('slider.update');
         Route::get('/slider/delete/{slider}', 'sliderDelete')->name('slider.delete');
-
     });
+
     Route::controller(AdminOrderController::class)->group(function () {
 
         Route::get('/orders','index')->name('admin.orders');
@@ -120,6 +120,17 @@ Route::prefix('admin')->middleware(['auth','isAdmin'])->group(function() {
         Route::put('/order/view/{order_id}','updateOrderStatus')->name('admin.order.update');
         Route::get('/invoice/view/{order_id}','viewInvoice')->name('admin.invoice.view');
         Route::get('/invoice/download/{order_id}', 'downloadInvoice')->name('admin.invoice.download');
+        Route::get('/invoice/mail/{order_id}','mailInvoice')->name('admin.invoice.mail');
+    });
+
+    Route::controller(UserController::class)->group(function () {
+
+        Route::get('/users','index')->name('user');
+        Route::get('/user/create','userCreate')->name('user.create');
+        Route::post('/user/delete','userPost')->name('user.post');
+        Route::get('/user/edit/{user_id}','userEdit')->name('user.edit');
+        Route::put('/user/update/{user_id}','userUpdate')->name('user.update');
+        Route::get('/user/delete/{user_id}','userDelete')->name('user.delete');
 
     });
 
