@@ -25,7 +25,9 @@
     $(function()
     {
 
-        var orderData = {{json_encode($orderData)}};
+        var labelsData = {{ Js::from($labels) }};
+
+        var orderData = {{ Js::from($data) }};
 
         Highcharts.chart('highchart', {
 
@@ -39,8 +41,7 @@
                 title:{
                     text:'Month Base'
                 },
-                categories:['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September',
-                'October', 'November', 'December']
+                categories:labelsData
             },
             yAxis:{
                 title:{
@@ -51,11 +52,6 @@
             layout: 'vertical',
             align: 'right',
             verticalAlign: 'middle'
-        },
-        plotOptions: {
-            series: {
-                allowPointSelect: true
-            }
         },
         series: [{
             name: 'Order',

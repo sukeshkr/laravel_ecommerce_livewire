@@ -10,11 +10,17 @@ class ChartController extends Controller
 {
     public function index()
     {
-        $orderData = Order::select(DB::raw("COUNT(*) as count"))
+        $users = Order::select(DB::raw("COUNT(*) as count"), DB::raw("MONTHNAME(created_at) as month_name"))
                     ->whereYear('created_at', date('Y'))
-                    ->groupBy(DB::raw("Month(created_at)"))
-                    ->pluck('count');
+                    ->groupBy(DB::raw("month_name"))
+                    ->orderBy('created_at','ASC')
+                    ->pluck('count', 'month_name');
 
-        return view('admin.chart',compact('orderData'));
+        $labels = $users->keys();
+
+        $data = $users->values();
+
+        //return view('admin.chartjs',compact('labels','data'));
+        return view('admin.highchart',compact('labels','data'));
     }
 }
