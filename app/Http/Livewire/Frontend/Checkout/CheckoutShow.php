@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Frontend\Checkout;
 
+use App\Events\CheckOutEvent;
 use App\Mail\PlaceOrderMail;
 use App\Models\Cart;
 use App\Models\Order;
@@ -112,6 +113,8 @@ class CheckoutShow extends Component
 
         }
 
+        event(new CheckOutEvent($order->fullname));
+
         return $order;
     }
     public function cashOnDelivery()
@@ -178,9 +181,15 @@ class CheckoutShow extends Component
         $this->fullname = auth()->user()->name;
         $this->email    = auth()->user()->email;
 
-        $this->phone    = auth()->user()->userDetail->phone;
+        if(auth()->user()->userDetail) {
+
+            $this->phone    = auth()->user()->userDetail->phone;
         $this->pincode    = auth()->user()->userDetail->pin;
         $this->address    = auth()->user()->userDetail->address;
+
+        }
+
+
 
         return view('livewire.frontend.checkout.checkout-show',[
 

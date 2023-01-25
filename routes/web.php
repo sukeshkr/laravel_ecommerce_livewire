@@ -4,6 +4,7 @@ use App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\admin\ColorController;
 use App\Http\Controllers\admin\DashboardController;
 use App\Http\Controllers\admin\AdminOrderController;
+use App\Http\Controllers\admin\ChartController;
 use App\Http\Controllers\admin\ProductController;
 use App\Http\Controllers\admin\SiteSettingController;
 use App\Http\Controllers\admin\SliderController;
@@ -63,6 +64,8 @@ Route::middleware('auth')->group(function () {
 Route::prefix('admin')->middleware(['auth','isAdmin'])->group(function() {
 
     Route::get('/dashboard',[DashboardController::class,'index'])->name('admin.dashboard');
+
+    Route::get('/chart',[ChartController::class,'index'])->name('admin.chart');
 
     Route::get('/site-settings',[SiteSettingController::class,'index'])->name('site.settings');
     Route::post('/post-setting',[SiteSettingController::class,'postSetting'])->name('post.setting');

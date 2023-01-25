@@ -6,6 +6,12 @@
           <span class="menu-title">Dashboard</span>
         </a>
       </li>
+      <li class="nav-item {{Request::is('admin/chart') ? 'active' : ''}}">
+        <a class="nav-link" href="{{route('admin.chart')}}">
+          <i class="mdi mdi-home menu-icon"></i>
+          <span class="menu-title">Chart</span>
+        </a>
+      </li>
       <li class="nav-item {{Request::is('admin/category*') ? 'active' : ''}}">
         <a class="nav-link" data-bs-toggle="collapse" href="#category" aria-expanded="{{Request::is('admin/category*') ? 'true' : 'false'}}" aria-controls="ui-basic">
             <i class="mdi mdi-view-headline menu-icon"></i>

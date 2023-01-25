@@ -11,6 +11,9 @@
         <link rel="stylesheet" href="{{asset('admin/vendors/mdi/css/materialdesignicons.min.css')}}">
         <link rel="stylesheet" href="admin/vendors/base/vendor.bundle.base.css">
         <!-- endinject -->
+        <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"/>
+        <!-- Default theme -->
+        <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css"/>
         <!-- plugin css for this page -->
         <link rel="stylesheet" href="{{asset('admin/vendors/datatables.net-bs4/dataTables.bootstrap4.css')}}">
         <!-- End plugin css for this page -->
@@ -18,8 +21,6 @@
         <link rel="stylesheet" href="{{asset('admin/css/style.css')}}">
         <!-- endinject -->
         <link rel="shortcut icon" href="{{asset('admin/images/favicon.png')}}" />
-
-
         <!-- livewire -->
         @livewireStyles
     </head>
@@ -63,6 +64,32 @@
   <script src="{{asset('admin/js/data-table.js')}}"></script>
   <script src="{{asset('admin/js/jquery.dataTables.js')}}"></script>
   <script src="{{asset('admin/js/dataTables.bootstrap4.js')}}"></script>
+  <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+
+  <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
+
+ <script>
+
+
+    // Enable pusher logging - don't include this in production
+    Pusher.logToConsole = true;
+
+    var pusher = new Pusher('38131e2ca2b5fdc00db4', {
+      cluster: 'ap2'
+    });
+
+    var channel = pusher.subscribe('lara-ecom');
+    channel.bind('checkout-order', function(data) {
+
+    var canDismiss = false;
+    alertify.set('notifier','position', 'top-right');
+    var notification = alertify.success(JSON.stringify('Please check your Oreder page...You have a new Order from '+data.order));
+    notification.ondismiss = function(){ return canDismiss; };
+    setTimeout(function(){ canDismiss = true;}, 5000);
+
+    });
+  </script>
+
   <!-- End custom js for this page-->
     @yield('scripts')
     @livewireScripts
